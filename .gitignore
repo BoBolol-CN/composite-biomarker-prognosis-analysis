@@ -1,0 +1,20 @@
+# Study data, fitted objects and execution output stay local.
+private-data/
+data/
+outputs/
+local/
+*.rds
+*.RData
+*.Rhistory
+*.xlsx
+*.xls
+*.csv
+*.rar
+*.zip
+*.log
+.Renviron
+.Rprofile
+.Rproj.user/
+.DS_Store
+Thumbs.db
+__pycache__/
