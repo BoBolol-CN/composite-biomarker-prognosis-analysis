@@ -1,10 +1,62 @@
-# Composite Biomarker Prognosis Analysis
+# Composite Biomarker Prognosis: Analysis & Writing
 
-**复合指标预后分析 skill + 可运行的 R 工作流。** 用一份配置描述指标公式、数据列、终点、调整集和验证方案，生成可追溯的分析表、模型及图表。论文写作由独立的 writing skill 负责。
+**复合指标预后研究：一个仓库，两个独立 skill。** 分析模块负责研究设计、统计分析与模型验证；写作模块根据已有方案、结果和文献，完成研究定位、逐章起草、图表说明和全文审稿。仓库共用这一个 README。
+
+## 选择需要的 skill
+
+| Skill | 职责 | 入口 |
+| --- | --- | --- |
+| `composite-biomarker-prognosis-analysis` | 配置驱动的 R 分析、诊断、预测验证及结果交接 | [分析 SKILL.md](SKILL.md)（仓库根目录） |
+| `composite-biomarker-prognosis-writing` | 文献准备、研究主线、逐章写作、结果溯源及审稿修改 | [写作 SKILL.md](skills/composite-biomarker-prognosis-writing/SKILL.md) |
+
+两个 skill 可独立使用。写作可读取其他软件生成的表格和材料，不要求先安装或运行分析 skill。分析与写作通过结果清单衔接，不共享真实患者数据或私人项目路径。
+
+### 写作流程与详细指南
+
+```text
+已有方案、结果表、图和执行记录
+        ↓
+结果核对与来源清单
+        ↓
+三类文献 → 核心对标 → 研究贡献与全文主线
+        ↓
+题目/关键词 → Introduction → Methods → Results
+        ↓
+Discussion → 局限与结论 → Abstract
+        ↓
+章内复核 → 语言润色 → 全文模拟审稿与修改
+```
+
+这是完整写作任务的建议推进方式；单章、翻译或润色只处理相关部分。章节根据实际研究和期刊调整，不强制固定文献篇数、优势数量、模型数量或三代理。
+
+- [写作前准备与研究主线](skills/composite-biomarker-prognosis-writing/references/writing-preparation.md)：三类文献与证据表、核心对标、贡献依据和写作计划。
+- [论文逐章写作与复核](skills/composite-biomarker-prognosis-writing/references/manuscript-workflow.md)：Introduction 四段如何推进、Methods 小节、Results 分支、Discussion 的贡献/文献/机制/临床意义，以及摘要、表图、润色和审稿。
+- [结果交接与溯源](skills/composite-biomarker-prognosis-writing/references/result-handoff.md)：核对实际方法、样本/事件数、效应与区间、结果版本和解释限制；普通文件也可整理为清单。
+
+写作只描述真实实施的方法和有依据的结果，区分未做、未提供、失败和阴性。不会自动补造机器学习、外部验证、伦理审批、引文或临床阈值，也不会为写论文擅自重跑数据分析。
+
+### 目录安排
+
+```text
+README.md                         # 两个 skill 共用的仓库说明
+SKILL.md                          # 分析 skill 入口
+agents/  assets/  references/      # 分析资源
+scripts/  tests/  docs/            # R 工作流、检查和模拟图
+skills/
+└── composite-biomarker-prognosis-writing/
+    ├── SKILL.md
+    ├── agents/openai.yaml
+    └── references/
+        ├── writing-preparation.md
+        ├── manuscript-workflow.md
+        └── result-handoff.md
+```
+
+现有 R 工作流保留在根目录，下面的分析命令和图片路径可继续使用。
 
 这套代码从具体项目工作流重构而来。研究数据、旧项目结果和私人路径均不在仓库内；下面所有展示图由固定种子的**模拟数据**实际运行生成，只展示分析能力和成品样式。
 
-## 成品图预览
+## 分析模块：成品图预览
 
 ### 生存曲线、风险人数与调整后非线性关系
 
@@ -92,16 +144,31 @@ Rscript scripts/run_analysis.R path/to/study-config.R
 Rscript scripts/predict_external.R outputs/study-run/frozen_prediction_models.rds private-data/new-cohort.csv outputs/new-predictions.csv
 ```
 
-## 安装和使用 skill
+## 安装和分别调用两个 skill
 
-本仓库根目录也是 skill 目录，入口是 [SKILL.md](SKILL.md)。将整个仓库目录放入所用工具支持的skills目录，保持 `scripts/`、`assets/` 与 `references/` 相对位置一致；也可以直接使用 R 脚本。
+下载仓库后，将两个 skill 放入所用工具支持的 skills 目录，分别保留自己的入口和相对资源：
 
-调用示例：
+1. **分析 skill**：目录命名为 `composite-biomarker-prognosis-analysis`，包含仓库根目录的 `SKILL.md`、`agents/`、`assets/`、`references/`、`scripts/`；需要演示及测试时同时保留 `docs/` 和 `tests/`。R 脚本也可直接在仓库根目录运行。
+2. **写作 skill**：将仓库中的 `skills/composite-biomarker-prognosis-writing/` 整个目录放入 skills 目录，保持其内部结构。它不需要 R 环境或分析 skill 即可处理已有研究材料。
 
-> 使用 `$composite-biomarker-prognosis-analysis`，先核对这份队列的数据字典和结局定义，再按配置分析该复合指标与预后的关联，并输出可交给写作流程的结果清单。
+分析调用示例：
+
+> 使用 `$composite-biomarker-prognosis-analysis`，核对队列的数据字典和结局定义，按配置分析该复合指标与预后的关联，并输出可交给写作流程的结果清单。
+
+写作调用示例：
+
+> 使用 `$composite-biomarker-prognosis-writing`，阅读已有方案、结果表和图，核对真实方法与数字，完成文献准备和研究主线，再起草论文；未核实的信息列待补，不新增数据分析。
+
+### 分析结果如何交给写作
+
+分析工作流提供的 `results_manifest.csv` 可作为来源之一。最小交接语义为 `result_id`、`analysis/status`、`population/endpoint`、`specification`、`estimate`、`source`、`qualification`；允许等价字段名、分列或文字记录，斜线不是强制机器键。
+
+同时提供研究定义、实际方法记录和必要图表，让写作可定位到真实结果。已有普通 Excel 表、统计输出或人工总结时，也可由写作 skill 建立清单，无须重新运行分析。患者级数据、标识、逐行预测和受控模型文件留在研究目录，不上传到本仓库。
 
 ## 可复现与验证
 
 本地在 R 4.4.3 上运行了完整模拟演示及18项行为检查，覆盖数据验证、事件先后、冻结预处理、分组隔离、AUC核对、插补合并、模型预测与选择边界；Cox时距预测还与 `survival::survfit` 核对。该验证不等于临床验证，也不证明所有可选软件版本均兼容。模型对象、原始数据和逐行预测均不随仓库分发。
 
 方法依据与使用约束见 [R运行参考](references/r-execution.md) 和各领域参考文件。
+
+写作 skill 已完成结构、相对链接、文件包一致性与配置的项目残留检查，并做过手工场景走查；这不等于真实论文的端到端验证。详细写作指南保留原工作流的章节展开，研究方法和结论仍以当前项目证据为准。
